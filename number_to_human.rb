@@ -8,13 +8,14 @@ UNITS_TABLE = {
 def number_to_human(number, opts = {})
   exponent = exponent(number)
 
-  "#{number/10.0**exponent} #{UNITS_TABLE[exponent]}".strip  
+  "#{number/10.0**exponent} #{UNITS_TABLE[exponent]}".strip
 end
 
 def exponent(number)
   exponent = Math.log10(number).floor
 
   unless exponent.modulo(3).zero?
+    exponent = 0 if exponent < 3
     exponent = 3 if (3..5).include?(exponent)
     exponent = 6 if (6..8).include?(exponent)
     exponent = 9 if (9..12).include?(exponent)
