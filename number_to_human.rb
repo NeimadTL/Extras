@@ -8,7 +8,7 @@ UNITS_TABLE = {
 def number_to_human(number, opts = {})
   exponent = exponent(number)
 
-  "#{number/10.0**exponent} #{UNITS_TABLE[exponent]}".strip
+  "#{(number/10.0**exponent).truncate(PRECISION)} #{UNITS_TABLE[exponent]}".strip
 end
 
 def exponent(number)
