@@ -8,7 +8,7 @@ UNITS_TABLE = {
 def number_to_human(number, opts = {})
   exponent = exponent(number)
 
-  "#{(number/10.0**exponent).truncate(PRECISION)} #{UNITS_TABLE[exponent]}".strip
+  human_friendly_number(number, exponent)
 end
 
 def exponent(number)
@@ -24,6 +24,26 @@ def exponent(number)
   exponent
 end
 
+def calculate_value(number, exponent)
+  (number/10.0**exponent).truncate(PRECISION)
+end
+
+def determine_unit(exponent)
+  UNITS_TABLE[exponent]
+end
+
+def human_friendly_number(number, exponent)
+   value = strip_unsignificant_zero(calculate_value(number, exponent))
+   unit = determine_unit(exponent)
+
+  "#{value} #{unit}".strip
+end
+
+def strip_unsignificant_zero(value)
+  float, integer = value, value.to_i
+
+  float == integer ? integer : float
+end
 
 puts "=> #{number_to_human(1).inspect}"
 puts "=> #{number_to_human(12).inspect}"
@@ -34,7 +54,7 @@ puts "=> #{number_to_human(123456).inspect}"
 puts "=> #{number_to_human(1234567).inspect}"
 puts "=> #{number_to_human(12345678).inspect}"
 puts "=> #{number_to_human(123456789).inspect}"
-puts "=> #{number_to_human(1234567891).inspect}"
-puts "=> #{number_to_human(12345678912).inspect}"
-puts "=> #{number_to_human(123456789123).inspect}"
+puts "=> #{number_to_human(1234567890).inspect}"
+puts "=> #{number_to_human(12345678901).inspect}"
+puts "=> #{number_to_human(123456789012).inspect}"
 
