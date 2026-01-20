@@ -8,7 +8,7 @@ UNITS_TABLE = {
 def number_to_human(number, opts = {})
   exponent = exponent(number)
 
-  human_friendly_number(number, exponent)
+  human_friendly_number(number, exponent, opts)
 end
 
 def exponent(number)
@@ -32,18 +32,24 @@ def determine_unit(exponent)
   UNITS_TABLE[exponent]
 end
 
-def human_friendly_number(number, exponent)
-   value = strip_unsignificant_zero(calculate_value(number, exponent))
+def human_friendly_number(number, exponent, opts)
+   value = strip_unsignificant_zeros(calculate_value(number, exponent))
+   
+   with_zeros = opts[:strip_insignificant_zeros]
+   value = calculate_value(number, exponent) if with_zeros == false
    unit = determine_unit(exponent)
 
   "#{value} #{unit}".strip
 end
 
-def strip_unsignificant_zero(value)
+def strip_unsignificant_zeros(value)
   float, integer = value, value.to_i
 
   float == integer ? integer : float
 end
+
+puts "-> #{number_to_human(12.00001).inspect}"
+puts "-> #{number_to_human(12.00001, strip_insignificant_zeros: false).inspect}"
 
 puts "=> #{number_to_human(1).inspect}"
 puts "=> #{number_to_human(12).inspect}"
