@@ -35,8 +35,8 @@ end
 def human_friendly_number(number, exponent, opts)
    value = strip_unsignificant_zeros(calculate_value(number, exponent))
    
-   with_zeros = opts[:strip_insignificant_zeros]
-   value = calculate_value(number, exponent) if with_zeros == false
+   strip_zeros = opts[:strip_insignificant_zeros]
+   value = calculate_value(number, exponent) if strip_zeros == false
    unit = determine_unit(exponent)
 
   "#{value} #{unit}".strip
@@ -47,9 +47,6 @@ def strip_unsignificant_zeros(value)
 
   float == integer ? integer : float
 end
-
-puts "-> #{number_to_human(12.00001).inspect}"
-puts "-> #{number_to_human(12.00001, strip_insignificant_zeros: false).inspect}"
 
 puts "=> #{number_to_human(1).inspect}"
 puts "=> #{number_to_human(12).inspect}"
@@ -63,4 +60,5 @@ puts "=> #{number_to_human(123456789).inspect}"
 puts "=> #{number_to_human(1234567890).inspect}"
 puts "=> #{number_to_human(12345678901).inspect}"
 puts "=> #{number_to_human(123456789012).inspect}"
-
+puts "-> #{number_to_human(9.00001).inspect}"
+puts "-> #{number_to_human(9.00001, strip_insignificant_zeros: false).inspect}"
