@@ -24,8 +24,8 @@ def exponent(number)
   exponent
 end
 
-def calculate_value(number, exponent)
-  (number/10.0**exponent).truncate(PRECISION)
+def calculate_value(number, exponent, precision)
+  (number/10.0**exponent).truncate(precision)
 end
 
 def determine_unit(exponent)
@@ -33,11 +33,12 @@ def determine_unit(exponent)
 end
 
 def human_friendly_number(number, exponent, opts)
-   value = strip_unsignificant_zeros(calculate_value(number, exponent))
-   
-   strip_zeros = opts[:strip_insignificant_zeros]
-   value = calculate_value(number, exponent) if strip_zeros == false
-   unit = determine_unit(exponent)
+  precision = opts[:precision] ? opts[:precision] : PRECISION
+  strip_zeros = opts[:strip_insignificant_zeros]
+
+  value = strip_unsignificant_zeros(calculate_value(number, exponent, precision))
+  value = calculate_value(number, exponent, precision) if strip_zeros == false
+  unit = determine_unit(exponent)
 
   "#{value} #{unit}".strip
 end
@@ -52,13 +53,13 @@ puts "=> #{number_to_human(1).inspect}"
 puts "=> #{number_to_human(12).inspect}"
 puts "=> #{number_to_human(123).inspect}"
 puts "=> #{number_to_human(1234).inspect}"
-puts "=> #{number_to_human(12345).inspect}"
-puts "=> #{number_to_human(123456).inspect}"
-puts "=> #{number_to_human(1234567).inspect}"
-puts "=> #{number_to_human(12345678).inspect}"
-puts "=> #{number_to_human(123456789).inspect}"
-puts "=> #{number_to_human(1234567890).inspect}"
-puts "=> #{number_to_human(12345678901).inspect}"
-puts "=> #{number_to_human(123456789012).inspect}"
+puts "=> #{number_to_human(12_345).inspect}"
+puts "=> #{number_to_human(123_456).inspect}"
+puts "=> #{number_to_human(1_234_567).inspect}"
+puts "=> #{number_to_human(12_345_678).inspect}"
+puts "=> #{number_to_human(123_456_789).inspect}"
+puts "=> #{number_to_human(1_234_567_890).inspect}"
+puts "=> #{number_to_human(12_345_678_901).inspect}"
+puts "=> #{number_to_human(123_456_789_012).inspect}"
 puts "-> #{number_to_human(9.00001).inspect}"
-puts "-> #{number_to_human(9.00001, strip_insignificant_zeros: false).inspect}"
+puts "-> #{number_to_human(9.00001, strip_insignificant_zeros: false, precision: 5).inspect}"
