@@ -35,9 +35,11 @@ end
 def human_friendly_number(number, exponent, opts)
   precision = opts[:precision] ? opts[:precision] : PRECISION
   strip_zeros = opts[:strip_insignificant_zeros]
+  separator = opts[:separator]
 
   value = strip_unsignificant_zeros(calculate_value(number, exponent, precision))
   value = calculate_value(number, exponent, precision) if strip_zeros == false
+  value = value.to_s.gsub('.', separator) unless separator.nil?
   unit = determine_unit(exponent)
 
   "#{value} #{unit}".strip
@@ -62,4 +64,4 @@ puts "=> #{number_to_human(1_234_567_890).inspect}"
 puts "=> #{number_to_human(12_345_678_901).inspect}"
 puts "=> #{number_to_human(123_456_789_012).inspect}"
 puts "-> #{number_to_human(9.00001).inspect}"
-puts "-> #{number_to_human(9.00001, strip_insignificant_zeros: false, precision: 5).inspect}"
+puts "-> #{number_to_human(9.00001, strip_insignificant_zeros: false, precision: 5, separator: ',').inspect}"
