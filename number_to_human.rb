@@ -1,9 +1,15 @@
+#integers: :unit, :ten, :hundred, :thousand, :million, :billion, :trillion, :quadrillion
+#fractionals: :deci, :centi, :mili, :micro, :nano, :pico, :femto
+
+
+
 PRECISION = 3
 UNITS_TABLE = {
- 3 => "Thousand",
- 6 => "Million",
- 9 => "Billion"
+ :thousand => 3,
+ :million => 6,
+ :billion => 9
 }
+EXPONENTS_TABLE = UNITS_TABLE.invert
 
 def number_to_human(number, opts = {})
   exponent = exponent(number)
@@ -29,7 +35,7 @@ def calculate_value(number, exponent, precision)
 end
 
 def determine_unit(exponent)
-  UNITS_TABLE[exponent]
+  EXPONENTS_TABLE[exponent]
 end
 
 def human_friendly_number(number, exponent, opts)
@@ -41,7 +47,7 @@ def human_friendly_number(number, exponent, opts)
   value = strip_unsignificant_zeros(calculate_value(number, exponent, precision))
   value = calculate_value(number, exponent, precision) if strip_zeros == false
   value = value.to_s.gsub('.', separator) unless separator.nil?
-  UNITS_TABLE.update(units) unless units.nil?
+  update_units(units) unless units.nil?
   unit = determine_unit(exponent)
 
   "#{value} #{unit}".strip
@@ -53,10 +59,17 @@ def strip_unsignificant_zeros(value)
   float == integer ? integer : float
 end
 
+def update_units(custom_units)
+  custom_units.each do |unit_key, custom_v|
+    lookup_key = EXPONENTS_TABLE.key(unit_key)
+    EXPONENTS_TABLE[lookup_key] = custom_v
+  end
+end
+
 puts "=> #{number_to_human(1).inspect}"
 puts "=> #{number_to_human(12).inspect}"
 puts "=> #{number_to_human(123).inspect}"
-puts "=> #{number_to_human(1234, units: {3=>'K', 9=>'B'}).inspect}"
+puts "=> #{number_to_human(1234, units: {:thousand=>'K', :billion=>'B'}).inspect}"
 puts "=> #{number_to_human(12_345).inspect}"
 puts "=> #{number_to_human(123_456).inspect}"
 puts "=> #{number_to_human(1_234_567).inspect}"
