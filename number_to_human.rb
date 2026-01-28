@@ -2,6 +2,7 @@
 #fractionals: :deci, :centi, :mili, :micro, :nano, :pico, :femto
 
 
+class InvalidNumberError < StandardError; end
 
 PRECISION = 3
 UNITS_TABLE = {
@@ -12,8 +13,9 @@ UNITS_TABLE = {
 EXPONENTS_TABLE = UNITS_TABLE.invert
 
 def number_to_human(number, opts = {})
-  exponent = exponent(number)
+  raise 'Number must be Integer or Float' unless [Integer, Float].include?(number.class)
 
+  exponent = exponent(number)
   human_friendly_number(number, exponent, opts)
 end
 
@@ -39,7 +41,7 @@ def determine_unit(exponent)
 end
 
 def human_friendly_number(number, exponent, opts)
-  precision = opts[:precision] ? opts[:precision] : PRECISION
+  precision = opts[:precision] || PRECISION
   strip_zeros = opts[:strip_insignificant_zeros]
   separator = opts[:separator]
   units = opts[:units]
@@ -80,3 +82,4 @@ puts "=> #{number_to_human(12_345_678_901).inspect}"
 puts "=> #{number_to_human(123_456_789_012).inspect}"
 puts "-> #{number_to_human(9.00001).inspect}"
 puts "-> #{number_to_human(9.00001, strip_insignificant_zeros: false, precision: 5, separator: ',').inspect}"
+puts "=> #{number_to_human('a').inspect}"
