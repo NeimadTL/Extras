@@ -1,6 +1,6 @@
 import kotlin.math.*
     
-fun convert(number: Double, units: Map<String, String>): String {
+fun convert(number: Double, units: Map<String, String> = emptyMap<String, String>()): String {
     val unitsMap = mapOf("Nano" to -9, "Micro" to -6, "Milli" to -3 , "Unit" to 0, "Thousand" to 3, "Million" to 6, "Billion" to 9)    
     var exponent = Math.floor(Math.log10(number)).toInt()
     if (!exponent.mod(3).equals(0)){
@@ -44,4 +44,5 @@ fun main() {
     println(convert(0.0001, customUnits))
     println(convert(0.00001, customUnits))
     println(convert(0.000001, customUnits))
+    println(convert(0.000001))
 }
